@@ -8,6 +8,7 @@ const { PORT, DATABASE_URL, SESSION_SECRET } = require('./config/keys');
 require('./config/passport-config');
 const { authApi } = require('./api/authApi');
 const { newAccApi } = require('./api/newAccApi');
+const { schoolApi } = require("./api/schoolApi");
 require('./model/User');
 require('./model/School');
 require('./model/Student');
@@ -47,6 +48,7 @@ app.use(passport.session()); // passport will target the req.session property
 
 app.use('/auth', authApi);
 app.use('/create', newAccApi);
+app.use('/school',schoolApi);
 
 app.get('/', (req,res) => {
     console.log(req.session);
