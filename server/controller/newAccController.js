@@ -22,7 +22,14 @@ const newStudentController = async (req, res) => {
             return res.status(400).json({ message:"Roll Number or Email already exists !" });
         }
 
-        const infoDoc = await Student.create({ firstname, lastname, degree, stream, rollNumber });
+        const infoDoc = await Student.create({ 
+            firstname, 
+            lastname, 
+            degree, 
+            stream, 
+            rollNumber, 
+            school: req.user.userInfo._id
+        });
         const password = genPassword();
         const newUser = await User.create({ 
             email: email,
@@ -78,7 +85,11 @@ const newTeacherController = async (req, res) => {
             return res.status(400).json({ message:"Email already exists !" });
         }
 
-        const infoDoc = await Teacher.create({ firstname, lastname });
+        const infoDoc = await Teacher.create({ 
+            firstname, 
+            lastname,
+            school: req.user.userInfo._id
+        });
         const password = genPassword();
         const newUser = await User.create({ 
             email: email,

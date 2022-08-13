@@ -1,4 +1,4 @@
-const { Classroom } = require("../model/Classroom");
+const { Classroom } = require("../model/ClassRoom");
 
 const createClassroom = async(req,res) => {
     if(req?.user?.userType != "School"){
@@ -9,6 +9,7 @@ const createClassroom = async(req,res) => {
     const newClassroom = await Classroom.create({ 
         subject: subject,
         learningOutcomes: learningOutcomes,
+        school: req.user.userInfo._id
     });
     res.status(200).json({ newClassroom: newClassroom });
 }
