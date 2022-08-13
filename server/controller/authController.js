@@ -1,15 +1,17 @@
+const nodemailer = require('nodemailer');
 const { User } = require("../model/User");
 const { School } = require("../model/School");
 const { genPassword } = require("../utils/genPassword");
+const { ORG_EMAIL, ORG_PASSWORD } = require('../config/keys');
 
 const signupController = async (req, res) => {
     // send message containing uniqueId and password
     try
     {
-        const { name, email, phone } = req.body;
+        const { name, email } = req.body;
 
         // check existing
-        const existingUser = await User.findOne({ phone: phone });
+        const existingUser = await User.findOne({ email: email });
         if(existingUser)
         {
             console.log('[-] User already exists !');
@@ -17,19 +19,40 @@ const signupController = async (req, res) => {
         }
 
         // only school can signup, accounts of students and teachers will be created by school
-        // and credentials would be sent to phone number (would be implemented in other routes)
-        const infoDoc = await School.create({ name, email });
+        // and credentials would be sent to email (would be implemented in other routes)
+
+        const infoDoc = await School.create({ name });
         const password = genPassword();
         const newUser = await User.create({ 
-            phone: phone,
+            email: email,
             userType: 'School',
             userInfo: infoDoc._id,
             password: password
         });
 
-        // TODO: Use a messaging service to send uniqueId(newUser._id) and password(newUser.password or just password) to phone number(newUser.phone)
+        // Use a messaging service to send uniqueId(newUser._id) and password(newUser.password or just password) to email(newUser.email)
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: ORG_EMAIL,
+                pass: ORG_PASSWORD,
+            }
+        });
 
-        res.status(200).json({ message: "SignUp Successful", user: newUser });
+        const emailMsg = `<h2>Thank you for registering with PRAGMATE</h2>
+        <p><b>Your Institution Name is: ${infoDoc.name}</b></p><br>
+        <p><b>Your unique ID is: ${newUser._id}</b></p><br>
+        <p><b>Your password is: ${newUser.password}</b></p><br>
+        <p>Please login using the above credentials</p>`;
+
+        const info = await transporter.sendMail({
+            from: ORG_EMAIL, // sender address
+            to: email, // list of receivers
+            subject: "Your account credentials for using PRAGMATE", // Subject line
+            html: emailMsg
+        });
+
+        res.status(200).json({ message: "SignUp Successful", name: infoDoc.name });
     }
     catch(err)
     {
@@ -43,5 +66,20 @@ const loginController = (req,res) => {
     res.status(200).json({ message: "Login Successful", user: req.user });
 }
 
+const logoutController = (req,res) => {
+    req.logout();
+
+    req.session.destroy((err) => {
+        if (!err) {
+            res.status(200).clearCookie('connect.sid').json({ message: "Logout Successful" });
+            console.log('Successfully logged out');
+        } else {
+            res.status(500).json({ message: `Error : ${err}` })
+            console.log(err);
+        }
+    });
+}
+
 module.exports.loginController = loginController;
 module.exports.signupController = signupController;
+module.exports.logoutController = logoutController;
