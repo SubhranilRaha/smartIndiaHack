@@ -1,5 +1,5 @@
-import email
-from fileinput import filename
+
+
 from faker import Faker
 #create a faker object
 
