@@ -16,6 +16,12 @@ y = df['Score']
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.3,random_state=101)
 model = LinearRegression()
-sv = model.fit(X_train,y_train)
+model.fit(X_train,y_train)
 
-pickle.dump(sv, open("tmodel.pkl","wb"))
+y_pred = model.predict(X_test)
+
+
+pickle.dump(model, open("tmodel.pkl","wb"))
+
+model = pickle.load(open('tmodel.pkl','rb'))
+print(model.predict([[56.7,6]]))
