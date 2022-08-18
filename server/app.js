@@ -9,6 +9,8 @@ require('./config/passport-config');
 const { authApi } = require('./api/authApi');
 const { newAccApi } = require('./api/newAccApi');
 const { schoolApi } = require("./api/schoolApi");
+const { testApi } = require("./api/testApi");
+const { cocurrApi } = require("./api/cocurrApi");
 require('./model/User');
 require('./model/School');
 require('./model/Student');
@@ -38,7 +40,7 @@ app.use(expressSession({
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-        maxAge: 1000 * 60 // 1 minute
+        maxAge: 1000 * 60 * 60 // 1 hour
     }
 }));
 // After this, request has a req.session property added by express session
@@ -49,6 +51,8 @@ app.use(passport.session()); // passport will target the req.session property
 app.use('/auth', authApi);
 app.use('/create', newAccApi);
 app.use('/school',schoolApi);
+app.use('/test', testApi);
+app.use('/cocurr', cocurrApi);
 
 app.get('/', (req,res) => {
     console.log(req.session);
