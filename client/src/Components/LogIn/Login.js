@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { Link } from 'react-router-dom'
-
+ 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
-}
+} 
 
 export default function Login() {
-  let [categories] = useState({
+  let [categories] = useState({  
     Student: [
       {
         id: 1,
@@ -30,9 +30,9 @@ export default function Login() {
 
   return (
    
-         <div className="min-w- sm:px-0 h-screen bg-gradient-to-r from-orange-500 to-yellow-500 pt-10 flex flex-col lg:pt-20 lg:pl-10  items-center">
+         <div className="flex flex-col items-center h-screen pt-10 min-w- sm:px-0 bg-gradient-to-r from-orange-500 to-yellow-500 lg:pt-20 lg:pl-10">
       <Tab.Group>
-        <Tab.List className="flex space-x-1 rounded-xl bg-orange-900/20 p-1 mb-5 mx-2 w-96">
+        <Tab.List className="flex p-1 mx-2 mb-5 space-x-1 rounded-xl bg-orange-900/20 w-96">
           {Object.keys(categories).map((category) => (
             <Tab
               key={category}

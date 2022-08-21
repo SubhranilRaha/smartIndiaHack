@@ -3,7 +3,7 @@ import icon from './logo.png'
 
 function topnav() {
   return (
-    <div className='flex flex-col justify-start h-screen '>
+    <div className='flex flex-col justify-start'>
          <div id="upnavbar" className="flex flex-row justify-between ">
                     <a href="/" className='flex items-center'>
                     <img src={icon} alt="" className='py-2 pl-2 h-14 '/>
@@ -14,8 +14,8 @@ function topnav() {
                     </div>
                     </a>           
             <div className='flex flex-row items-center p-2 text-2xl'>
-                <i className="hidden lg:block md:block uil uil-moon mr-2 text-3xl"></i>
-                <i className="hidden lg:block md:block uil uil-user-circle mr-2 text-3xl"></i>  
+                <i className="hidden mr-2 text-3xl lg:block md:block uil uil-moon"></i>
+                <i className="hidden mr-2 text-3xl lg:block md:block uil uil-user-circle"></i>  
             </div>
         </div>
     </div>
